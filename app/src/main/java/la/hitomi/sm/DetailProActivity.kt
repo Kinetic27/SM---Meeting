@@ -63,6 +63,7 @@ class DetailProActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnMarker
 
                 when (response.code()) {
                     200 -> {
+                        mMap.clear()
                         repo!!.indices.forEach {
                             val marker = LatLng(repo[it].lat.toDouble(), repo[it].lng.toDouble())
                             mMap.addMarker(MarkerOptions().position(marker).title(repo[it].placeName))
@@ -83,7 +84,6 @@ class DetailProActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(p0: LocationResult) {
                 super.onLocationResult(p0)
-
                 lastLocation = p0.lastLocation
                 placeMarkerOnMap(LatLng(lastLocation.latitude, lastLocation.longitude))
             }
@@ -97,7 +97,6 @@ class DetailProActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         mMap = googleMap
         mMap.uiSettings.isZoomControlsEnabled = true
         mMap.setOnMarkerClickListener(this)
-
         setUpMap()
     }
 
@@ -111,7 +110,6 @@ class DetailProActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnMarker
                 startLocationUpdates()
             }
         }
-
     }
 
 
@@ -128,15 +126,13 @@ class DetailProActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnMarker
     }
 
     private fun setUpMap() {
-
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             mMap.isMyLocationEnabled = true
 
-            fusedLocationClient.lastLocation.addOnSuccessListener(this) { location ->
-                if (location != null) {
-                    lastLocation = location
-                    val currentLatLng = LatLng(location.latitude, location.longitude)
-                    placeMarkerOnMap(currentLatLng)
+            fusedLocationClient.lastLocation.addOnSuccessListener(this) {
+                if (it != null) {
+                    lastLocation = it
+                    val currentLatLng = LatLng(it.latitude, it.longitude)
                     mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 12f))
                 }
             }
