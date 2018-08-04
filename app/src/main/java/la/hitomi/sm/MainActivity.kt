@@ -75,12 +75,12 @@ class MainActivity : BaseActivity() {
         override fun getItem(position: Int): Fragment? {
 
             return when (position) {
-                0 ->PeopleFragment()
-                    //CalenderFragment()
+                0 ->
+                    CalendarFragment()
                 1 ->
                     PeopleFragment()
-                2 ->PeopleFragment()
-                    //TalkFragment()
+                2 ->
+                    ChatFragment()
                 3 ->PeopleFragment()
                     //SettingFragment()
                 else ->

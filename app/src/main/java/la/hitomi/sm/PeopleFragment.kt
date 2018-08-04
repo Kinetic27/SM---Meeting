@@ -57,7 +57,7 @@ class PeopleFragment : Fragment() {
         override fun onBindViewHolder(holder: Holder, position: Int) {
 
             with(holder.itemView) {
-                val data = dataList[position]
+                //val data = dataList[position]
 
                 //writeTv.text = data.writer
                // dateTv.text = data.content
