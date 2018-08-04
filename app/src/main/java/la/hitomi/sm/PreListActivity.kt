@@ -1,7 +1,6 @@
 package la.hitomi.sm
 
 import android.content.ContentUris
-import android.graphics.Color
 import android.provider.CalendarContract
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
@@ -24,12 +23,13 @@ class PreListActivity : BaseActivity() {
 
     override fun onCreate() {
         year = intent.getIntExtra("year", 2000)
-        month = intent.getIntExtra("month", 1)+1
+        month = intent.getIntExtra("month", 1) + 1
         day = intent.getIntExtra("day", 1)
         //toast(""+year+""+month+""+day)
         initRecyclerView()
         readEvents()
     }
+
     private fun initRecyclerView() { // RecyclerView 기본세팅
         // 변경될 가능성 o : false 로 , 없다면 true.
         recyclerView.setHasFixedSize(false)
@@ -38,6 +38,7 @@ class PreListActivity : BaseActivity() {
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
     }
+
     fun readEvents() {
         val INSTANCE_PROJECTION = arrayOf(CalendarContract.Instances.EVENT_ID, // 0
                 CalendarContract.Instances.BEGIN, // 1
@@ -79,22 +80,41 @@ class PreListActivity : BaseActivity() {
             // Do something with the values.
             Log.i("Calendar", "Event:  $title")
             val calendar = Calendar.getInstance()
+            val curCalendar = Calendar.getInstance()
             calendar.timeInMillis = beginVal
             val formatter = SimpleDateFormat("MM/dd/yyyy", Locale.KOREA)
             Log.i("Calendar", "Date: " + formatter.format(calendar.time))
-            var arrContent : List<String>?
-            if(title.contains("<CONTENT>")) {
-                title = title.replace("CONTENT", "")
+            var arrContent: List<String>?
+            if (title.contains("<CONTENT>")) {
+                title = title.replace("<CONTENT>", "")
                 arrContent = title.split("<CR>")
-            }else{
+            } else {
                 arrContent = null
             }
+            val diffSec: Long = (calendar.timeInMillis - curCalendar.timeInMillis) / 1000       //초
+            var diffMin: Long = diffSec / 60
+            var resHour = 0L
+            var resDay = 0L
+            if (diffMin > 60) {
+                resHour = (diffMin / 60)
+                diffMin %= 60
+            }
+            if (resHour > 24) {
+                resDay = resHour / 24
+                resHour %= 24
+            }
+
             Log.d("TAG", "Event ID: $eventID\nEvent: $title\nOrganizer: $organizer\nDate: ${formatter.format(calendar.time)}")
-            if(calendar.get(Calendar.YEAR)==year && (calendar.get(Calendar.MONTH)+1) == month && calendar.get(Calendar.DAY_OF_MONTH) == day) {
-                if(arrContent!=null)
-                    mItems.add(PromiseItem(arrContent[0],arrContent[1],arrContent[2]))
-                else
-                    mItems.add(PromiseItem(title,"null","null"))
+            if (calendar.get(Calendar.YEAR) == year && (calendar.get(Calendar.MONTH) + 1) == month && calendar.get(Calendar.DAY_OF_MONTH) == day) {
+                var timeRemain = ""
+                if (resDay != 0L)
+                    timeRemain += "${resDay}일"
+                if (resHour != 0L)
+                    timeRemain += " ${resHour}시간"
+                timeRemain += " ${diffMin}분 "
+                if (arrContent != null) {
+                    mItems.add(PromiseItem(arrContent[0], arrContent[1], timeRemain))
+                }
             }
         }
         //calendarView.addDecorator(EventDecorator(Color.RED, dates, this))

@@ -138,7 +138,7 @@ class MainActivity : AppCompatActivity() , PermissionListener{
             Log.i("Calendar", "Rows deleted: $rows")
         }
 
-        showEvents(eventTitle)
+        //showEvents(eventTitle)
     }
 
     fun searchEvent(view: View) {
