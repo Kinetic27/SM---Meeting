@@ -11,7 +11,7 @@ import java.util.ArrayList
 /**
  * Created by hyunjin on 2018. 5. 11..
  */
-class PromiseAdapter(private var mItems: ArrayList<PromiseItem>) : RecyclerView.Adapter<PromiseAdapter.ItemViewHolder>() {
+class PromiseAdapter(private var mItems: ArrayList<PromiseItem>, val listener: OnItemClickListener) : RecyclerView.Adapter<PromiseAdapter.ItemViewHolder>() {
 
     var id: String? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
@@ -23,6 +23,8 @@ class PromiseAdapter(private var mItems: ArrayList<PromiseItem>) : RecyclerView.
         holder.title.text = mItems[position].title
         holder.location.text = mItems[position].location
         holder.remain.text = mItems[position].remain
+
+        holder.itemView.setOnClickListener { listener.onClick(position) }
     }
 
     override fun getItemCount(): Int {

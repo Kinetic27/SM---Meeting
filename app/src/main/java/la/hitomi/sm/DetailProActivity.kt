@@ -21,6 +21,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import kotlinx.android.synthetic.main.activity_detail.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -53,6 +54,10 @@ class DetailProActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnMarker
 
         hideActionBar()
 
+        remainTime.setOnClickListener {
+            startActivity(Intent(this@DetailProActivity,LockActivity::class.java))
+        }
+
         val mapFragment: SupportMapFragment? =  supportFragmentManager
                 .findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(this)
@@ -64,13 +69,18 @@ class DetailProActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnMarker
 
                 when (response.code()) {
                     200 -> {
-                        mMap.clear()
+                       /* mMap.clear()
                         repo!!.indices.forEach {
                             val marker = LatLng(repo[it].lat.toDouble(), repo[it].lng.toDouble())
                             mMap.addMarker(MarkerOptions().position(marker).title(repo[it].placeName))
                             mMap.moveCamera(CameraUpdateFactory.newLatLng(marker))
                             setUpMap()
-                        }
+                        }*/
+
+                        val marker = LatLng(37.566609, 126.978002)
+                        mMap.addMarker(MarkerOptions().position(marker).title("서울 시청"))
+                        mMap.moveCamera(CameraUpdateFactory.newLatLng(marker))
+                        setUpMap()
                     }
                 }
             }
@@ -181,12 +191,10 @@ class DetailProActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         }
         task.addOnFailureListener { e ->
             // 6
-            if (e is ResolvableApiException) {
-                try {
-                    e.startResolutionForResult(this,
-                            REQUEST_CHECK_SETTINGS)
-                } catch (sendEx: IntentSender.SendIntentException) {
-                }
+            if (e is ResolvableApiException) try {
+                e.startResolutionForResult(this,
+                        REQUEST_CHECK_SETTINGS)
+            } catch (sendEx: IntentSender.SendIntentException) {
             }
         }
     }

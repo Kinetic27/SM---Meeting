@@ -23,18 +23,17 @@ import la.hitomi.sm.decorator.EventDecorator
 import la.hitomi.sm.decorator.SaturdayDecorator
 import la.hitomi.sm.decorator.SundayDecorator
 import org.jetbrains.anko.startActivity
-import org.jetbrains.anko.support.v4.toast
 import java.text.SimpleDateFormat
 import java.util.*
 
 class CalendarFragment : Fragment() , PermissionListener{
 
     override fun onPermissionGranted() {
-        toast("Permission Grant Successfully")
+        //toast("Permission Grant Successfully")
     }
 
     override fun onPermissionDenied(deniedPermissions: ArrayList<String>?) {
-        toast("Permission Grant Failed")
+        //toast("Permission Grant Failed")
     }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_calendar, container, false)
@@ -53,8 +52,9 @@ class CalendarFragment : Fragment() , PermissionListener{
             activity.startActivity<PreListActivity>("year" to date.year, "month" to date.month, "day" to date.day)
         }
 
-        //addEvent("test event", "here!!", 2018, 9, 6)
+        /*addEvent("늦지 말기", "서울 창업지원 센터", 2018, 8, 5)
 
+        addEvent("중요한 일정", "서울 시청", 2018, 8, 6)*/
 
         readEvents(view)
         return view

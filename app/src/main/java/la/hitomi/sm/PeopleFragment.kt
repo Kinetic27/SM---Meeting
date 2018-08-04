@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import kotlinx.android.synthetic.main.fragment_people.view.*
+import kotlinx.android.synthetic.main.item_prelist.view.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -20,15 +21,16 @@ class PeopleFragment : Fragment() {
     private var adapter: RecyclerAdapter? = null
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_people, container, false)
-        view.fab.setOnClickListener {
-            items += Data("글 제목", "작성자", "1분 전", "질문있습니다!")
-            recyclerView!!.adapter.notifyDataSetChanged()
-        }
+
         recyclerView = view!!.findViewById(R.id.recyclerView)
         recyclerView!!.setHasFixedSize(true)
         recyclerView!!.layoutManager = LinearLayoutManager(context, LinearLayout.VERTICAL, false)
         recyclerView!!.adapter = RecyclerAdapter(items)
         adapter = recyclerView!!.adapter as RecyclerAdapter?
+
+        items += Data("중요한 일정", "서울 시청", "20시간 5분 전")
+        items += Data("늦지 말기", "창업 지원 센터", "1일 전")
+        recyclerView!!.adapter.notifyDataSetChanged()
 
         Client.retrofitService.getsnsList().enqueue(object : Callback<ArrayList<PeopleRepo>> {
             override fun onResponse(call: Call<ArrayList<PeopleRepo>>?, response: Response<ArrayList<PeopleRepo>>?) {
@@ -37,7 +39,7 @@ class PeopleFragment : Fragment() {
                 when (response.code()) {
                     200 -> {
                         repo!!.indices.forEach {
-                            items += Data(repo[it].id!!, repo[it].writer!!, repo[it].date!!, repo[it].content!!)
+                            items += Data(repo[it].id!!, repo[it].writer!!, repo[it].date!!)
                             recyclerView!!.adapter.notifyDataSetChanged()
                         }
                     }
@@ -57,11 +59,11 @@ class PeopleFragment : Fragment() {
         override fun onBindViewHolder(holder: Holder, position: Int) {
 
             with(holder.itemView) {
-                //val data = dataList[position]
+                val data = dataList[position]
 
-                //writeTv.text = data.writer
-               // dateTv.text = data.content
-                //contentTv.text = data.date
+                title.text = data.id
+               location.text = data.writer
+                remainTime.text = data.content
 
             }
         }
@@ -69,6 +71,6 @@ class PeopleFragment : Fragment() {
 
         inner class Holder(parent: ViewGroup)
             : RecyclerView.ViewHolder(LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_people, parent, false))
+                .inflate(R.layout.item_prelist, parent, false))
     }
 }

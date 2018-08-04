@@ -23,8 +23,13 @@ class ChatAdapter(private var mItems: ArrayList<ChatItem>) : RecyclerView.Adapte
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         holder.name.text = mItems[position].name
-        if(mItems[position].name=="나")
+        if(mItems[position].name=="심효근")
             holder.name.textColor = Color.RED
+
+
+        if(mItems[position].name=="우현진")
+            holder.name.textColor = Color.BLACK
+
         holder.content.text = mItems[position].content
     }
 

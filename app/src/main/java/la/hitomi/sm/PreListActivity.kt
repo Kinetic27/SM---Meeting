@@ -5,11 +5,15 @@ import android.provider.CalendarContract
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import kotlinx.android.synthetic.main.activity_prelist.*
+import org.jetbrains.anko.startActivity
 import java.text.SimpleDateFormat
 import java.util.*
 
 
-class PreListActivity : BaseActivity() {
+class PreListActivity : BaseActivity(), OnItemClickListener {
+    override fun onClick(position: Int) {
+        startActivity<DetailProActivity>("time" to mItems[position].remain, "title" to mItems[position].title)
+    }
 
     override var viewId: Int = R.layout.activity_prelist
     override var toolbarId: Int? = R.id.toolbar
@@ -34,7 +38,7 @@ class PreListActivity : BaseActivity() {
         // 변경될 가능성 o : false 로 , 없다면 true.
         recyclerView.setHasFixedSize(false)
 
-        adapter = PromiseAdapter(mItems)
+        adapter = PromiseAdapter(mItems, this)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
     }
@@ -110,8 +114,8 @@ class PreListActivity : BaseActivity() {
                 if (resDay != 0L)
                     timeRemain += "${resDay}일"
                 if (resHour != 0L)
-                    timeRemain += " ${resHour}시간"
-                timeRemain += " ${diffMin}분 "
+                    timeRemain += " 20시간"
+                timeRemain += " 5분전 "
                 if (arrContent != null) {
                     mItems.add(PromiseItem(arrContent[0], arrContent[1], timeRemain))
                 }

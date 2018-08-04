@@ -81,8 +81,8 @@ class MainActivity : BaseActivity() {
                     PeopleFragment()
                 2 ->
                     ChatFragment()
-                3 ->PeopleFragment()
-                    //SettingFragment()
+                3 ->
+                    SettingFragment()
                 else ->
                     null
             }

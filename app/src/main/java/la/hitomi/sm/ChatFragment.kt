@@ -22,7 +22,8 @@ class ChatFragment : Fragment() {
 
         initRecyclerView(view)
         view.send.onClick {
-            mItems.add(ChatItem("나",view.form.text.toString()))
+            mItems.add(ChatItem("심효근", view.form.text.toString()))
+            view.form.setText("")
             adapter!!.notifyDataSetChanged()
         }
         addDummy()
