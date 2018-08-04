@@ -26,23 +26,11 @@ import org.jetbrains.anko.startActivity
 import java.text.SimpleDateFormat
 import java.util.*
 
-class CalendarFragment : Fragment() , PermissionListener{
-
-    override fun onPermissionGranted() {
-        //toast("Permission Grant Successfully")
-    }
-
-    override fun onPermissionDenied(deniedPermissions: ArrayList<String>?) {
-        //toast("Permission Grant Failed")
-    }
+class CalendarFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_calendar, container, false)
          
-        TedPermission.with(activity)
-                .setPermissionListener(this)
-                .setDeniedMessage("If you reject permission,you can not use this service\n\nPlease turn on permissions at [Setting] > [Permission]")
-                .setPermissions(Manifest.permission.GET_ACCOUNTS,Manifest.permission.READ_CALENDAR, Manifest.permission.WRITE_CALENDAR)
-                .check()
+
         view.calendarView.state().edit().setMinimumDate(CalendarDay.from(2018, 8, 5))
         view.calendarView.addDecorators(
                 SundayDecorator(),
